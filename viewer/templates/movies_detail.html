@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ object.title }}</h1>
+<p>Genre: {{ object.genre.name }}</p>
+<p>Rating: {{ object.rating }}</p>
+<p>Released: {{ object.released }}</p>
+<p>Description: {{ object.description }}</p>
+<p>Added at: {{ object.created }}</p>
+
+<h3>Actors</h3>
+<ul>
+    <!-- Pentru field-uri manytomany trebuie folosit .all -->
+    <!-- pentru a itera printre obiecte -->
+    {% for actor in object.actors.all %}
+        <li>{{ actor.name }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
+
+

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <!--  Afisam variabile pe site  -->
+    <h1>Welcome to {{ title }} </h1>
+    <p>This is a site about movies.</p>
+
+    <!--  Loop printr-o lista  -->
+    <h1>My favourite pets:</h1>
+    {% for animal in animals %}
+        <p>{{ animal }}</p>
+    {% endfor %}
+
+    <!--  If statement  -->
+    {% if title == 'CoolMovies' %}
+        <p>Very cool name!</p>
+    {% else %}
+        <p>Not a cool name :(</p>
+    {% endif %}
+
+    <!--  Tag special pentru comentarii  -->
+    {% comment %}
+        <!--    {{  }}-->
+        <!--    <p>Title again: {{ title }}</p>-->
+    {% endcomment %}
+
+{% endblock %}

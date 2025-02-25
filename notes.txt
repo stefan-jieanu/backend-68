@@ -1,0 +1,12 @@
+Pentru a crea un backend vom folosi framework-ul Django.
+Django se foloseste de design pattern-ul MTV (MVC):
+- Model -> datele cu care vom lucra (baza de date)
+- Template (View) -> prezentarea informatiilor
+- View (Controller) -> business logic
+
+Django include:
+- ORM (Object Relational Mapping)
+- Template language
+- Autentificare si Autorizare
+- Pagina administrator
+- Etc..

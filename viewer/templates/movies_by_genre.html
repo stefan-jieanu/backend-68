@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% comment %}
+<h1>All {{ genre.name }} movies</h1>
+{% endcomment %}
+
+<ul>
+    {% for movie in object_list %}
+    <li>
+        <a href="{% url 'movies_detail' movie.id %}">{{ movie.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
