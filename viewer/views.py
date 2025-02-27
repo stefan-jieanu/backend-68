@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
 from viewer.forms import MovieForm
 from viewer.models import Movie, Genre
@@ -92,10 +92,33 @@ class MoviesByGenreView(ListView):
 #         print('Formularul nu este valid')
 #         return super().form_invalid(form)
 
+
+# 5 HTTP Request methods:
+# GET - used for getting data
+# POST - used for sending data
+# DELETE - used for deleting data
+# PUT - used for updating entire objects, if it doesn't exist create a new one
+# PATCH - used for partially updating data
+
+
 class MovieCreateView(CreateView):
     template_name = 'movies_form.html'
     form_class = MovieForm
 
     # success_url este link-ul la care vom fi trimisi dupa completarea formularului
     # functia reverse_lazy() ne va returna un path definit in urls.py dupa nume
+    success_url = reverse_lazy('movies')
+
+
+class MovieUpdateView(UpdateView):
+    template_name = 'movies_form.html'
+    form_class = MovieForm
+    model = Movie
+
+    success_url = reverse_lazy('movies')
+
+
+class MovieDeleteView(DeleteView):
+    template_name = 'movie_confirm_delete.html'
+    model = Movie
     success_url = reverse_lazy('movies')

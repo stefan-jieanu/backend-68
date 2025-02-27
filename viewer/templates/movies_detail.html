@@ -18,6 +18,14 @@
     {% endfor %}
 </ul>
 
+<a class="btn btn-warning" href="{% url 'movies_update' object.pk %}">
+    Edit
+</a>
+
+<a class="btn btn-danger" href="{% url 'movies_delete' object.pk %}">
+    Delete
+</a>
+
 {% endblock %}
 
 

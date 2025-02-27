@@ -1,27 +1,21 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 
+from books.forms import BookForm
 from books.models import Book
 
+class BooksView(ListView):
+    template_name = 'books.html'
+    model = Book
 
-# Create your views here.
-def books(request):
-    books = Book.objects.all()
 
-    return render(
-        request,
-        'books.html',
-        context={
-            'books': books
-        }
-    )
+class BooksDetail(DetailView):
+    template_name = 'books_detail.html'
+    model = Book
 
-def book_detail(request, id):
-    book = Book.objects.get(id=id)
 
-    return render(
-        request,
-        'books_detail.html',
-        context={
-            'book': book
-        }
-    )
+class BooksCreate(CreateView):
+    template_name = 'books_form.html'
+    form_class = BookForm
+    success_url = reverse_lazy('books')

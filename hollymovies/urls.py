@@ -17,33 +17,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from books.views import books, book_detail
-
-# from viewer.views import hello, new_page, show_title, show_params
-
 from django.conf import settings
 from django.conf.urls.static import static
 
 from viewer import urls as viewer_urls
+from books import urls as books_urls
 from viewer.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    # path('', hello),
-    # path('pagina/noua/', new_page),
-    # # Exemplu de path cu parametru regular expression
-    # path('show/<title>', show_title),
-    # # Exemplu de path cu parametru url encoded
-    # path('show-params', show_params)
 
     path('', home, name='home'),
 
     # Includem toate linkurile care incep cu /movies din fisierul
     # aflat in viewer/urls.py
     path('movies/', include(viewer_urls)),
+    path('books/', include(books_urls))
 
-    path('books/', books, name='books'),
-    path('books/<id>', book_detail, name='book_detail')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # ^ adaugam link-uri pentru fisierele statice
