@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <a href="{% url 'movies_create' %}" class="btn btn-primary">Add new</a>
+    <!-- Afisam butonul doar daca utilizatorul are voie sa adauge un film -->
+    <!-- perms este un obiect pus automat de Django care contine toate permisiunile utilizatorului care  -->
+    <!-- acceseaza pagina, sub forma: -->
+    <!-- perms.numeaplicatie.numeactiune_numemodel -->
+    {% if perms.viewer.add_movie %}
+        <a href="{% url 'movies_create' %}" class="btn btn-primary">Add new</a>
+    {% else %}
+        <p>Nu poti adauga filme!</p>
+    {% endif %}
 
     <h1>Movie list</h1>
     <ul>

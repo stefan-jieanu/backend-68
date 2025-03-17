@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 
 from viewer import urls as viewer_urls
 from books import urls as books_urls
+from accounts import urls as accounts_urls
+
 from viewer.views import home
 
 urlpatterns = [
@@ -32,7 +34,9 @@ urlpatterns = [
     # Includem toate linkurile care incep cu /movies din fisierul
     # aflat in viewer/urls.py
     path('movies/', include(viewer_urls)),
-    path('books/', include(books_urls))
+    path('books/', include(books_urls)),
 
+    # Includem link-urile pentru conturi/user views
+    path('accounts/', include(accounts_urls, namespace='accounts'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # ^ adaugam link-uri pentru fisierele statice

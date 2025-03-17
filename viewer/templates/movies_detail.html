@@ -18,13 +18,17 @@
     {% endfor %}
 </ul>
 
+{% if perms.viewer.change_movie %}
 <a class="btn btn-warning" href="{% url 'movies_update' object.pk %}">
     Edit
 </a>
+{% endif %}
 
+{% if perms.viewer.delete_movie %}
 <a class="btn btn-danger" href="{% url 'movies_delete' object.pk %}">
     Delete
 </a>
+{% endif %}
 
 {% endblock %}
 
