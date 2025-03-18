@@ -7,8 +7,9 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
 from viewer.forms import MovieForm
-from viewer.mixins import StaffRequiredMixin
-from viewer.models import Movie, Genre
+from viewer.mixins import StaffRequiredMixin, UserIsReviewOwnerMixin
+from viewer.models import Movie, Genre, Review
+
 
 # @login_required
 def home(request):
@@ -46,10 +47,58 @@ class MoviesView(PermissionRequiredMixin, ListView):
         return qs.order_by('released')
 
 
-class MoviesDetailView(StaffRequiredMixin, PermissionRequiredMixin, DetailView):
-    template_name = 'movies_detail.html'
-    model = Movie
-    permission_required = 'viewer.view_movie'
+# class MoviesDetailView(StaffRequiredMixin, PermissionRequiredMixin, DetailView):
+#     template_name = 'movies_detail.html'
+#     model = Movie
+#     permission_required = 'viewer.view_movie'
+
+def movie_detail_view(request, pk):
+    movie = Movie.objects.get(pk=pk)
+    reviews = Review.objects.filter(movie=movie)[:3]
+
+    # Verificam daca utilizatorul care vizioneza pagina a adaugat
+    # deja un review
+    # Daca nu, atunci ii vom afisa formularul
+    user_already_reviewed = False
+    for review in reviews:
+        if review.user == request.user:
+            user_already_reviewed = True
+
+    return render(
+        request,
+        'movies_detail.html',
+        context={
+            'object': movie,
+            'reviews': reviews,
+            'user_already_reviewed': user_already_reviewed
+        }
+    )
+
+
+@login_required()
+def add_review_view(request, movie_id):
+    # Verificam daca tipul requestului este POST
+    # (adica primim date dintr-un formular)
+    if request.method == 'POST':
+        rating = request.POST['rating']
+        description = request.POST['description']
+        movie = Movie.objects.get(pk=movie_id)
+
+        Review.objects.create(
+            rating=rating,
+            description=description,
+            movie=movie,
+            user=request.user
+        )
+
+        # Reincarcam pagina cu detalii filmului respectiv
+        return redirect('movies_detail', pk=movie_id)
+
+    # Daca tipul requestului este GET, doar vom trimite user-ul in
+    # alta parte
+    else:
+        return redirect('movies')
+
 
 
 def genres(request):
@@ -139,3 +188,24 @@ class MovieDeleteView(PermissionRequiredMixin, DeleteView):
     model = Movie
     permission_required = 'viewer.delete_movie'
     success_url = reverse_lazy('movies')
+
+
+class ReviewDeleteView(UserIsReviewOwnerMixin, DeleteView):
+    template_name = 'review_confirm_delete.html'
+    model = Review
+    success_url = reverse_lazy('movies')
+
+
+def all_reviews(request, movie_id):
+    movie = Movie.objects.get(pk=movie_id)
+    reviews = Review.objects.filter(movie=movie).order_by('-created')
+
+    return render(
+        request,
+        'all_reviews.html',
+        context={
+            'movie': movie,
+            'reviews': reviews
+        }
+    )
+
